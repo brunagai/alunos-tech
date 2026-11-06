@@ -1,0 +1,18 @@
+# Segredos locais. O modelo versionado é o .env.example.
+.env
+
+# Compilados .NET
+bin/
+obj/
+.vs/
+*.user
+artifacts/
+
+# Python do gerador de figuras
+__pycache__/
+*.pyc
+
+# Pacotes Android gerados
+*.apk
+*.aab
+*.idsig

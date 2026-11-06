@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AlunosTech.Mobile.MainPage"
+             Title="Colaborador">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="12">
+            <Label Text="Alunos Tech" FontSize="28" />
+            <Label Text="Aplicativo do colaborador. Usa o mesmo contrato da API." />
+            <Entry x:Name="Email" Text="colaborador@alunostech.local" Placeholder="E-mail" />
+            <Entry x:Name="Senha" Text="colaborador-dev" IsPassword="True" Placeholder="Senha" />
+            <Entry x:Name="CursoId" Text="22222222-2222-2222-2222-222222222222" Placeholder="CursoId" />
+            <Entry x:Name="Titulo" Text="Chamado pelo aplicativo" Placeholder="Título do chamado" />
+            <Button Text="Entrar" Clicked="OnEntrar" />
+            <Button Text="Matricular" Clicked="OnMatricular" />
+            <Button Text="Abrir chamado" Clicked="OnChamado" />
+            <Label x:Name="Saida" LineBreakMode="WordWrap" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

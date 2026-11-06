@@ -1,0 +1,9 @@
+# 7. Conclusão
+
+O objetivo geral era entregar uma solução tecnológica corporativa integrada para a Alunos Tech, com nuvem e DevOps, gestão ágil, programação .NET e programação de banco. Os eixos de aplicação, banco e gestão ágil foram atingidos; o de nuvem ficou no cluster kind desta máquina.
+
+O que foi executado no código e nos ensaios locais compreende a API em camadas, o portal web do gestor, a página de navegador do colaborador, o JWT com os dois papéis, o PostgreSQL com chave, índice único, procedimento de lote, função, gatilho, transação e papel sem `DELETE`, os testes de matrícula e o gerenciamento por backlog, Sprints e Kanban. O módulo desktop foi proposto e não foi construído.
+
+O que foi executado só no cluster local compreende o nó kind, o PostgreSQL em ClusterIP, o Deployment com usuário 1654, as sondas `/health/live` e `/health/ready` respondendo Healthy em `127.0.0.1:18080`, o Service em NodePort depois de o LoadBalancer permanecer sem endereço, o metrics-server, o `kubectl top` e o HPA. Uma leitura anterior desse HPA chegou a seis réplicas com a CPU acima de 70% do pedido; a Figura 11 mostra a leitura posterior, com 2 réplicas e CPU em 2% de 70%. A imagem `localhost:5001/alunos-tech-api:4604e61` foi enviada ao registro local e o rollout concluiu. O aplicativo MAUI, no emulador, recebeu HTTP 201 ao matricular o colaborador semeado. O Dockerfile que pede as imagens 8.0.427 e 8.0.33 não construiu, por EOF do daemon; a imagem que rodou partiu de `aspnet:10.0` com roll-forward.
+
+O que continua evolução compreende o registro público, a nuvem de provedor, a loja de aplicativo e o desktop. O job hospedado no GitHub não publicou a imagem nem atualizou o cluster. Não há pacote na App Store nem na Play Store, nem projeto WinForms ou WPF. A conclusão separa esses três grupos para não tratar o kind, o registro local e o emulador como se fossem a produção.

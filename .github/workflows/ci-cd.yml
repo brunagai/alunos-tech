@@ -1,0 +1,149 @@
+# Pipeline de CI/CD do Alunos Tech.
+# Dados sensiveis ficam em GitHub Secrets e configuracao nao secreta em Variables.
+#
+# Secrets esperados (Settings > Secrets and variables > Actions):
+#   REGISTRY_USERNAME   usuario do registry (Docker Hub ou GHCR)
+#   REGISTRY_TOKEN      token de escrita no registry; no GHCR pode ser o GITHUB_TOKEN
+#   PROD_DEPLOY_TOKEN   credencial usada so na atualizacao de producao
+#
+# Variables esperadas:
+#   CONTAINER_REGISTRY  host do registry, por exemplo ghcr.io ou docker.io
+#   IMAGE_NAME          caminho da imagem, por exemplo owner/alunos-tech-api
+#   PROD_HOST           host de producao, sem usuario nem senha
+
+name: CI/CD Alunos Tech
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  API_PROJECT: src/Api/AlunosTech.Api/AlunosTech.Api.csproj
+  IMAGE_NAME: alunos-tech-api
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v7
+
+      - name: Configurar SDK do .NET 8
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore "${{ env.API_PROJECT }}"
+
+      - name: Build
+        run: dotnet build "${{ env.API_PROJECT }}" --configuration Release --no-restore
+
+      - name: Detectar projetos de teste
+        id: tests
+        shell: bash
+        run: |
+          if find . -type f -iname '*test*.csproj' -print -quit | grep -q .; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Nenhum projeto de teste encontrado. A suite sera ignorada nesta execucao."
+          fi
+
+      - name: Testes
+        if: steps.tests.outputs.exists == 'true'
+        run: dotnet test --configuration Release
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build da imagem Docker
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          build-args: |
+            PROJECT_FILE=${{ env.API_PROJECT }}
+
+  cd:
+    name: CD (exemplo)
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Plano de envio ao Container Registry
+        env:
+          REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
+          IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+        run: |
+          registry="${REGISTRY:-ghcr.io}"
+          image="${IMAGE_NAME:-${{ github.repository }}/alunos-tech-api}"
+          tag="${{ github.sha }}"
+          echo "Este job no GitHub nao publica imagem e nao alcanca o cluster local."
+          echo "A entrega executada nesta maquina esta em deploy/local/entregar.ps1."
+          echo "Registry: ${registry}"
+          echo "Imagem: ${registry}/${image}:${tag}"
+          if [ -n "${REGISTRY_USERNAME}" ]; then
+            echo "REGISTRY_USERNAME esta configurado."
+          else
+            echo "REGISTRY_USERNAME ainda nao foi configurado."
+          fi
+          echo "Comandos equivalentes, executados somente quando o registry estiver ativo:"
+          echo "  docker login ${registry}"
+          echo "  docker push ${registry}/${image}:${tag}"
+
+      # Login e push reais. Descomente um dos logins e o passo de publicacao
+      # quando o registry e os secrets existirem. A senha nunca entra no YAML.
+      #
+      # GitHub Packages (GHCR), com o token automatico do workflow:
+      # - name: Login no GHCR
+      #   uses: docker/login-action@v4
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+      #
+      # Docker Hub:
+      # - name: Login no Docker Hub
+      #   uses: docker/login-action@v4
+      #   with:
+      #     username: ${{ secrets.REGISTRY_USERNAME }}
+      #     password: ${{ secrets.REGISTRY_TOKEN }}
+      #
+      # - name: Publicar imagem
+      #   uses: docker/build-push-action@v7
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       ghcr.io/${{ github.repository }}/alunos-tech-api:${{ github.sha }}
+      #       ghcr.io/${{ github.repository }}/alunos-tech-api:latest
+      #     build-args: |
+      #       PROJECT_FILE=src/Api/AlunosTech.Api/AlunosTech.Api.csproj
+
+      - name: Plano de atualizacao em producao
+        env:
+          PROD_HOST: ${{ vars.PROD_HOST }}
+          PROD_DEPLOY_TOKEN: ${{ secrets.PROD_DEPLOY_TOKEN }}
+        run: |
+          echo "Nenhum provedor de nuvem foi contactado por este job."
+          echo "Host: ${PROD_HOST:-nao configurado}"
+          if [ -n "${PROD_DEPLOY_TOKEN}" ]; then
+            echo "PROD_DEPLOY_TOKEN esta configurado. O valor permanece oculto pelo GitHub."
+          else
+            echo "PROD_DEPLOY_TOKEN ainda nao foi configurado."
+          fi
+          echo "Depois do push, o host passaria a usar a nova tag:"
+          echo "  docker compose pull api"
+          echo "  docker compose up -d api"

@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{F55AD191-08E0-4B03-BDA9-B569060C5C6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlunosTech.Domain", "src\Domain\AlunosTech.Domain\AlunosTech.Domain.csproj", "{D8E70486-3FFD-4FC4-AD75-BB40C82A0108}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{EACB3897-2BCF-421C-8D69-FC3E4FC886AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlunosTech.Application", "src\Application\AlunosTech.Application\AlunosTech.Application.csproj", "{F643598F-1118-4174-BE54-963F1DF8BE83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{BEAD2229-F3D5-400B-B212-1BB2A6152901}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlunosTech.Infrastructure", "src\Infrastructure\AlunosTech.Infrastructure\AlunosTech.Infrastructure.csproj", "{BCE1A983-44A7-4D25-BFDC-E9297D716DFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{72F84719-C622-4EFE-B349-0C91AFDBC345}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlunosTech.Api", "src\Api\AlunosTech.Api\AlunosTech.Api.csproj", "{59BE9D56-C380-4F2F-9880-F175CB29AA0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5A2AC2E1-85F2-49BE-8715-F9A32A1E384E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlunosTech.Tests", "tests\AlunosTech.Tests\AlunosTech.Tests.csproj", "{25FE2F31-2013-417C-918E-E50EC4031300}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9742A6C3-E2EF-4320-98BE-01489E9CB6E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mobile", "Mobile", "{1A5BDFDD-C28A-4782-97F9-B70271718EAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlunosTech.Mobile", "src\Mobile\AlunosTech.Mobile\AlunosTech.Mobile.csproj", "{5050A7DC-FE5A-4D03-92BC-B6040858B643}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8E70486-3FFD-4FC4-AD75-BB40C82A0108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8E70486-3FFD-4FC4-AD75-BB40C82A0108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8E70486-3FFD-4FC4-AD75-BB40C82A0108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8E70486-3FFD-4FC4-AD75-BB40C82A0108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F643598F-1118-4174-BE54-963F1DF8BE83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F643598F-1118-4174-BE54-963F1DF8BE83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F643598F-1118-4174-BE54-963F1DF8BE83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F643598F-1118-4174-BE54-963F1DF8BE83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCE1A983-44A7-4D25-BFDC-E9297D716DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCE1A983-44A7-4D25-BFDC-E9297D716DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCE1A983-44A7-4D25-BFDC-E9297D716DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCE1A983-44A7-4D25-BFDC-E9297D716DFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59BE9D56-C380-4F2F-9880-F175CB29AA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59BE9D56-C380-4F2F-9880-F175CB29AA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59BE9D56-C380-4F2F-9880-F175CB29AA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59BE9D56-C380-4F2F-9880-F175CB29AA0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25FE2F31-2013-417C-918E-E50EC4031300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25FE2F31-2013-417C-918E-E50EC4031300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25FE2F31-2013-417C-918E-E50EC4031300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25FE2F31-2013-417C-918E-E50EC4031300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5050A7DC-FE5A-4D03-92BC-B6040858B643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5050A7DC-FE5A-4D03-92BC-B6040858B643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5050A7DC-FE5A-4D03-92BC-B6040858B643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5050A7DC-FE5A-4D03-92BC-B6040858B643}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D8E70486-3FFD-4FC4-AD75-BB40C82A0108} = {F55AD191-08E0-4B03-BDA9-B569060C5C6A}
+		{F643598F-1118-4174-BE54-963F1DF8BE83} = {EACB3897-2BCF-421C-8D69-FC3E4FC886AE}
+		{BCE1A983-44A7-4D25-BFDC-E9297D716DFE} = {BEAD2229-F3D5-400B-B212-1BB2A6152901}
+		{59BE9D56-C380-4F2F-9880-F175CB29AA0B} = {72F84719-C622-4EFE-B349-0C91AFDBC345}
+		{25FE2F31-2013-417C-918E-E50EC4031300} = {5A2AC2E1-85F2-49BE-8715-F9A32A1E384E}
+		{1A5BDFDD-C28A-4782-97F9-B70271718EAA} = {9742A6C3-E2EF-4320-98BE-01489E9CB6E3}
+		{5050A7DC-FE5A-4D03-92BC-B6040858B643} = {1A5BDFDD-C28A-4782-97F9-B70271718EAA}
+	EndGlobalSection
+EndGlobal

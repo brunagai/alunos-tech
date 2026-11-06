@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alunostech-db
+spec:
+  type: ClusterIP
+  selector:
+    app: alunostech-db
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alunostech-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alunostech-db
+  template:
+    metadata:
+      labels:
+        app: alunostech-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16.15-alpine3.24
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: alunostech-db
+                  key: password
+            - name: POSTGRES_DB
+              value: AlunosTechDb
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres", "-d", "AlunosTechDb"]
+            periodSeconds: 5
+          volumeMounts:
+            - name: init
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: init
+          configMap:
+            name: alunostech-db-init

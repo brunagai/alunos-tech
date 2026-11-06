@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alunostech-api
+  labels:
+    app: alunostech-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alunostech-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: alunostech-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1654
+        runAsGroup: 1654
+      containers:
+        - name: api
+          image: localhost:5001/alunos-tech-api:4604e61
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: alunostech-api
+                  key: connection-string
+            - name: Jwt__SigningKey
+              valueFrom:
+                secretKeyRef:
+                  name: alunostech-api
+                  key: jwt-signing-key
+            - name: Jwt__Issuer
+              value: AlunosTech
+            - name: Jwt__Audience
+              value: AlunosTech.Clientes
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: 256Mi
+            limits:
+              cpu: "500m"
+              memory: 512Mi

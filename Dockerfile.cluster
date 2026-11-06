@@ -1,0 +1,15 @@
+# Imagem efetivamente publicada no registro local.
+# O docker build do Dockerfile principal não conseguiu baixar
+# mcr.microsoft.com/dotnet/sdk:8.0.427 nem aspnet:8.0.33 (EOF do daemon).
+# Esta imagem parte de aspnet:10.0, já presente na máquina, e executa o
+# publish net8.0 com roll-forward de major.
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+COPY . .
+USER 1654
+ENV ASPNETCORE_HTTP_PORTS=8080 \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_EnableDiagnostics=0 \
+    DOTNET_ROLL_FORWARD=Major
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "AlunosTech.Api.dll"]

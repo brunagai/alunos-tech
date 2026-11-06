@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Portal do gestor — Alunos Tech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: "Times New Roman", serif; margin: 2rem; max-width: 40rem; }
+    label { display: block; margin-top: 0.6rem; }
+    input, select, button { font: inherit; width: 100%; }
+    p.aviso { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Portal do gestor</h1>
+  <p>Cliente web da API. O gestor matricula qualquer colaborador e abre chamado em nome dele.</p>
+  <form id="login">
+    <label>E-mail <input name="email" value="gestor@alunostech.local" required></label>
+    <label>Senha <input name="senha" type="password" value="gestor-dev" required></label>
+    <button>Entrar</button>
+  </form>
+  <form id="matricula" hidden>
+    <h2>Matrícula</h2>
+    <label>AlunoId <input name="alunoId" required></label>
+    <label>CursoId <input name="cursoId" required></label>
+    <button>Matricular</button>
+  </form>
+  <form id="chamado" hidden>
+    <h2>Chamado</h2>
+    <label>AlunoId <input name="alunoId" required></label>
+    <label>Título <input name="titulo" required></label>
+    <label>Descrição <input name="descricao"></label>
+    <label>Prioridade
+      <select name="prioridade"><option value="1">Baixa</option><option value="2">Média</option><option value="3">Alta</option></select>
+    </label>
+    <button>Abrir chamado</button>
+  </form>
+  <p class="aviso" id="saida"></p>
+  <script>
+    let token = "";
+    const saida = document.getElementById("saida");
+    async function api(caminho, corpo) {
+      const resposta = await fetch(caminho, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+        body: JSON.stringify(corpo)
+      });
+      const texto = await resposta.text();
+      saida.textContent = resposta.status + " " + texto;
+      if (!resposta.ok) throw new Error(texto);
+      return texto ? JSON.parse(texto) : {};
+    }
+    document.getElementById("login").addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const dados = new FormData(evento.target);
+      const sessao = await api("/api/auth/login", { email: dados.get("email"), senha: dados.get("senha") });
+      token = sessao.token;
+      document.getElementById("matricula").hidden = false;
+      document.getElementById("chamado").hidden = false;
+    });
+    document.getElementById("matricula").addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const dados = new FormData(evento.target);
+      await api("/api/matriculas", { alunoId: dados.get("alunoId"), cursoId: dados.get("cursoId") });
+    });
+    document.getElementById("chamado").addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const dados = new FormData(evento.target);
+      await api("/api/chamados", {
+        alunoId: dados.get("alunoId"),
+        titulo: dados.get("titulo"),
+        descricao: dados.get("descricao"),
+        prioridade: Number(dados.get("prioridade"))
+      });
+    });
+  </script>
+</body>
+</html>

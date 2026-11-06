@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alunostech-api
+spec:
+  # kind não atribui IP a LoadBalancer. A porta 30080 do nó está publicada no host 18080.
+  type: NodePort
+  selector:
+    app: alunostech-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: 30080

@@ -1,0 +1,105 @@
+﻿Pager usage is off.
+=== TABELAS ===
+         List of relations
+ Schema |  Name  | Type  |  Owner   
+--------+--------+-------+----------
+ public | Alunos | table | postgres
+(1 row)
+
+         List of relations
+ Schema |  Name  | Type  |  Owner   
+--------+--------+-------+----------
+ public | Cursos | table | postgres
+(1 row)
+
+           List of relations
+ Schema |    Name    | Type  |  Owner   
+--------+------------+-------+----------
+ public | Matriculas | table | postgres
+(1 row)
+
+              List of relations
+ Schema |      Name       | Type  |  Owner   
+--------+-----------------+-------+----------
+ public | ChamadosSuporte | table | postgres
+(1 row)
+
+=== ALUNOS ===
+                         Table "public.Alunos"
+  Column   |           Type           | Collation | Nullable | Default 
+-----------+--------------------------+-----------+----------+---------
+ Id        | uuid                     |           | not null | 
+ Nome      | character varying(150)   |           | not null | 
+ Email     | character varying(150)   |           | not null | 
+ Cargo     | character varying(100)   |           |          | 
+ Ativo     | boolean                  |           | not null | true
+ CreatedAt | timestamp with time zone |           | not null | 
+ UpdatedAt | timestamp with time zone |           | not null | 
+Indexes:
+    "PK_Alunos" PRIMARY KEY, btree ("Id")
+Referenced by:
+    TABLE ""ChamadosSuporte"" CONSTRAINT "FK_ChamadosSuporte_Alunos_AlunoId" FOREIGN KEY ("AlunoId") REFERENCES "Alunos"("Id") ON DELETE RESTRICT
+    TABLE ""Matriculas"" CONSTRAINT "FK_Matriculas_Alunos_AlunoId" FOREIGN KEY ("AlunoId") REFERENCES "Alunos"("Id") ON DELETE RESTRICT
+
+=== CURSOS ===
+                          Table "public.Cursos"
+    Column    |           Type           | Collation | Nullable | Default 
+--------------+--------------------------+-----------+----------+---------
+ Id           | uuid                     |           | not null | 
+ Titulo       | character varying(200)   |           | not null | 
+ Descricao    | character varying(1000)  |           |          | 
+ CargaHoraria | integer                  |           | not null | 
+ Ativo        | boolean                  |           | not null | true
+ CreatedAt    | timestamp with time zone |           | not null | 
+ UpdatedAt    | timestamp with time zone |           | not null | 
+Indexes:
+    "PK_Cursos" PRIMARY KEY, btree ("Id")
+Referenced by:
+    TABLE ""Matriculas"" CONSTRAINT "FK_Matriculas_Cursos_CursoId" FOREIGN KEY ("CursoId") REFERENCES "Cursos"("Id") ON DELETE RESTRICT
+
+=== MATRICULAS ===
+                         Table "public.Matriculas"
+    Column     |           Type           | Collation | Nullable | Default 
+---------------+--------------------------+-----------+----------+---------
+ Id            | uuid                     |           | not null | 
+ AlunoId       | uuid                     |           | not null | 
+ CursoId       | uuid                     |           | not null | 
+ Status        | integer                  |           | not null | 
+ DataMatricula | timestamp with time zone |           | not null | 
+ CreatedAt     | timestamp with time zone |           | not null | 
+ UpdatedAt     | timestamp with time zone |           | not null | 
+Indexes:
+    "PK_Matriculas" PRIMARY KEY, btree ("Id")
+    "IX_Matriculas_AlunoId" btree ("AlunoId")
+    "IX_Matriculas_CursoId" btree ("CursoId")
+    "UX_Matriculas_AlunoId_CursoId" UNIQUE, btree ("AlunoId", "CursoId")
+Foreign-key constraints:
+    "FK_Matriculas_Alunos_AlunoId" FOREIGN KEY ("AlunoId") REFERENCES "Alunos"("Id") ON DELETE RESTRICT
+    "FK_Matriculas_Cursos_CursoId" FOREIGN KEY ("CursoId") REFERENCES "Cursos"("Id") ON DELETE RESTRICT
+
+=== CHAMADOS ===
+                     Table "public.ChamadosSuporte"
+   Column   |           Type           | Collation | Nullable | Default 
+------------+--------------------------+-----------+----------+---------
+ Id         | uuid                     |           | not null | 
+ AlunoId    | uuid                     |           | not null | 
+ Titulo     | character varying(150)   |           | not null | 
+ Descricao  | character varying(2000)  |           |          | 
+ Status     | integer                  |           | not null | 
+ Prioridade | integer                  |           | not null | 
+ CreatedAt  | timestamp with time zone |           | not null | 
+ UpdatedAt  | timestamp with time zone |           | not null | 
+Indexes:
+    "PK_ChamadosSuporte" PRIMARY KEY, btree ("Id")
+    "IX_ChamadosSuporte_AlunoId" btree ("AlunoId")
+Foreign-key constraints:
+    "FK_ChamadosSuporte_Alunos_AlunoId" FOREIGN KEY ("AlunoId") REFERENCES "Alunos"("Id") ON DELETE RESTRICT
+Triggers:
+    tr_chamados_suporte_set_updated_at BEFORE UPDATE ON "ChamadosSuporte" FOR EACH ROW EXECUTE FUNCTION fn_chamados_suporte_set_updated_at()
+
+=== LOTE ===
+BEGIN
+INSERT 0 1
+CALL
+CALL
+ROLLBACK
